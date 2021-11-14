@@ -34,12 +34,15 @@ class ArenaScene: SKScene, SKSceneDelegate {
         )
 
         self.fuckRoller = layerFactory.makeRoller(spinarm: self.fuckSpinarm)
+
+        self.fuckPen = layerFactory.makePen(rollerSprite: self.fuckRoller)
     }
 
     var fuckSpinarm: SKSpriteNode!
     var fuckRoller: SKSpriteNode!
+    var fuckPen: SKSpriteNode!
 
-    static let rotationPeriodSeconds: TimeInterval = 10
+    static let rotationPeriodSeconds: TimeInterval = 3
 
     override func update(_ currentTime: TimeInterval) {
         tickCount += 1
@@ -52,15 +55,6 @@ class ArenaScene: SKScene, SKSceneDelegate {
         let rollAngle = fractionToSceneRadius * Double.tau / (60 * ArenaScene.rotationPeriodSeconds)
 
         let spinAngle = Double.tau / (60 * ArenaScene.rotationPeriodSeconds)
-/*
-        let spin = SKAction.rotate(byAngle: CGFloat.tau, duration: LayerFactory.rotationPeriodSeconds)
-        let spinForever = SKAction.repeatForever(spin)
-
-        let spin = SKAction.rotate(byAngle: CGFloat.tau, duration: LayerFactory.rotationPeriodSeconds)
-        let spinForever = SKAction.repeatForever(spin)
-        let crazyOnce = SKAction.group([spinForever, throb])
-        spinnerSprite.run(crazyOnce)
-*/
 
         fuckSpinarm.zRotation += spinAngle
         fuckRoller.zRotation -= spinAngle + rollAngle

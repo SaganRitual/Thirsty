@@ -22,10 +22,24 @@ extension LayerFactory {
         let rollerSprite = ringsPool.makeSprite()
 
         rollerSprite.color = ((spinarm as? SKSpriteNode)?.color ?? .red)
-        rollerSprite.size = size
+        rollerSprite.size = CGSize(width: size.width, height: lineHeight)
         rollerSprite.position = CGPoint(x: -spinarm.frame.size.width, y: 0)
 
         spinarm.addChild(rollerSprite)
+
+        return rollerSprite
+    }
+
+    func makePen(rollerSprite: SKSpriteNode) -> SKSpriteNode {
+        let penSprite = linesPool.makeSprite()
+
+        penSprite.anchorPoint = CGPoint(x: 0, y: 0.5)
+
+        penSprite.color = .yellow // rollerSprite.color
+        penSprite.size = rollerSprite.size
+        penSprite.zRotation = -.tau / 4
+
+        rollerSprite.addChild(penSprite)
 
         return rollerSprite
     }
