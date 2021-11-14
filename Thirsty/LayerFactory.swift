@@ -3,25 +3,32 @@
 import SpriteKit
 
 class LayerFactory {
-    let ringsPool = SpritePool("Markers", "circle", cPreallocate: 10000)
+    let dotsPool = SpritePool("Markers", "circle-solid", cPreallocate: 10000)
     let linesPool = SpritePool("Markers", "line")
+    let ringsPool = SpritePool("Markers", "circle")
 
     let arenaScene: ArenaScene
 
     init(arenaScene: ArenaScene) {
         self.arenaScene = arenaScene
     }
+
+    func makeLayer() -> Layer {
+        let spinarm = makeSpinarm(parentNode: arenaScene, color: .magenta)
+        let roller = makeRoller(spinarm: spinarm)
+        let pen = makePen(rollerSprite: roller)
+
+        return Layer(pen, roller, spinarm)
+    }
 }
 
 extension LayerFactory {
-    func makeRoller(spinarm: SKNode) -> SKSpriteNode {
-        let spinarmRawDiameter = spinarm.frame.size.width
-        let spinarmRawRadius = spinarmRawDiameter / 2
-        let size = CGSize(width: (spinarm as? SKSpriteNode)!.size.width, height: (spinarm as? SKSpriteNode)!.size.width)
+    func makeRoller(spinarm: SKSpriteNode) -> SKSpriteNode {
+        let size = CGSize(width: spinarm.size.width, height: spinarm.size.width)
 
         let rollerSprite = ringsPool.makeSprite()
 
-        rollerSprite.color = ((spinarm as? SKSpriteNode)?.color ?? .red)
+        rollerSprite.color = spinarm.color
         rollerSprite.size = CGSize(width: size.width, height: lineHeight)
         rollerSprite.position = CGPoint(x: -spinarm.frame.size.width, y: 0)
 
@@ -37,7 +44,6 @@ extension LayerFactory {
 
         penSprite.color = .yellow // rollerSprite.color
         penSprite.size = rollerSprite.size
-        penSprite.zRotation = -.tau / 4
 
         rollerSprite.addChild(penSprite)
 
@@ -45,7 +51,7 @@ extension LayerFactory {
     }
 
     func makeSpinarm(
-        parentNode: SKNode, spinarmRadiusShare: Double, color: SKColor
+        parentNode: SKNode, color: SKColor
     ) -> SKSpriteNode {
         let parentRollerRadius = parentNode.frame.size.width / 2
         let size = CGSize(width: maxSpinarmFraction * parentRollerRadius, height: lineHeight)
@@ -58,6 +64,7 @@ extension LayerFactory {
 
         parentNode.addChild(spinnerSprite)
 
+        // Stress test
         let throbPlus = SKAction.resize(toWidth: 0.9 * arenaScene.frame.size.width / 2, duration: sqrt(2))
         throbPlus.timingMode = .easeInEaseOut
         let throbMinus = SKAction.resize(toWidth: 0.1 * arenaScene.frame.size.width / 2, duration: sqrt(3))
@@ -65,7 +72,7 @@ extension LayerFactory {
         let throb = SKAction.sequence([throbPlus, throbMinus])
         let throbForever = SKAction.repeatForever(throb)
 
-//        spinnerSprite.run(throbForever)
+        spinnerSprite.run(throbForever)
 
         return spinnerSprite
     }
