@@ -26,13 +26,6 @@ extension LayerFactory {
         rollerSprite.position = CGPoint(x: -spinarm.frame.size.width, y: 0)
 
         spinarm.addChild(rollerSprite)
-//
-//        let fractionToSceneRadius = arenaScene.frame.size.width / size.width
-//        let driveAngle = -fractionToSceneRadius * Double.tau
-//
-//        let roll = SKAction.rotate(byAngle: driveAngle, duration: 4)
-//        let rollForever = SKAction.repeatForever(roll)
-//        rollerSprite.run(rollForever)
 
         return rollerSprite
     }
@@ -51,9 +44,6 @@ extension LayerFactory {
 
         parentNode.addChild(spinnerSprite)
 
-        let spin = SKAction.rotate(byAngle: CGFloat.tau, duration: 4)
-        let spinForever = SKAction.repeatForever(spin)
-
         let throbPlus = SKAction.resize(toWidth: 0.9 * arenaScene.frame.size.width / 2, duration: sqrt(2))
         throbPlus.timingMode = .easeInEaseOut
         let throbMinus = SKAction.resize(toWidth: 0.1 * arenaScene.frame.size.width / 2, duration: sqrt(3))
@@ -61,13 +51,7 @@ extension LayerFactory {
         let throb = SKAction.sequence([throbPlus, throbMinus])
         let throbForever = SKAction.repeatForever(throb)
 
-        spinnerSprite.userData = [
-            "spinForever": spinForever,
-            "throbForever": throbForever
-        ]
-
-        spinnerSprite.run(spinForever)
-        spinnerSprite.run(throbForever)
+//        spinnerSprite.run(throbForever)
 
         return spinnerSprite
     }

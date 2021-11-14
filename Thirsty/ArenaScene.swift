@@ -13,7 +13,7 @@ class ArenaScene: SKScene, SKSceneDelegate {
 
         backgroundColor = SKColor.init(calibratedWhite: 0.2, alpha: 1)
         anchorPoint = CGPoint(x: 0.5, y: 0.5)
-        speed = 0.25
+        speed = 1
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -39,11 +39,30 @@ class ArenaScene: SKScene, SKSceneDelegate {
     var fuckSpinarm: SKSpriteNode!
     var fuckRoller: SKSpriteNode!
 
+    static let rotationPeriodSeconds: TimeInterval = 10
+
     override func update(_ currentTime: TimeInterval) {
         tickCount += 1
 
         fuckRoller.position = CGPoint(x: fuckSpinarm.size.width, y: 0)
         fuckRoller.size.width = 2 * ((frame.size.width / 2) - fuckSpinarm.size.width)
         fuckRoller.size.height = fuckRoller.size.width
+
+        let fractionToSceneRadius = frame.size.width / fuckRoller.size.width
+        let rollAngle = fractionToSceneRadius * Double.tau / (60 * ArenaScene.rotationPeriodSeconds)
+
+        let spinAngle = Double.tau / (60 * ArenaScene.rotationPeriodSeconds)
+/*
+        let spin = SKAction.rotate(byAngle: CGFloat.tau, duration: LayerFactory.rotationPeriodSeconds)
+        let spinForever = SKAction.repeatForever(spin)
+
+        let spin = SKAction.rotate(byAngle: CGFloat.tau, duration: LayerFactory.rotationPeriodSeconds)
+        let spinForever = SKAction.repeatForever(spin)
+        let crazyOnce = SKAction.group([spinForever, throb])
+        spinnerSprite.run(crazyOnce)
+*/
+
+        fuckSpinarm.zRotation += spinAngle
+        fuckRoller.zRotation -= spinAngle + rollAngle
     }
 }
