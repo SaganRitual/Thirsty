@@ -2,6 +2,14 @@
 
 import SwiftUI
 
+extension Double {
+    static let tau = 2 * Double.pi
+}
+
+extension CGFloat {
+    static let tau = 2 * CGFloat.pi
+}
+
 @main
 struct ThirstyApp: App {
     var body: some Scene {
